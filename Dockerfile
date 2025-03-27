@@ -8,13 +8,11 @@ RUN apt-get update && apt-get install -y \
 
 
 # Move the files to the appropriate place
-RUN mv battery_monitor ~/ros2_ws/src/battery_monitor
+RUN mv ./battery_monitor ~/ros2_ws/src/battery_monitor
 
 # Build
 RUN cd ~/ros2_ws
 RUN colcon build
 
 # Run
-CMD ["source","/opt/ros/humble/setup.bash"]
-CMD ["source","install/local_setup.bash"]
-CMD ["ros2","run","battery_monitor","battery_monitor"]
+CMD source /opt/ros/humble/setup.bash && source install/local_setup.bash && ros2 run battery_monitor battery_monitor
