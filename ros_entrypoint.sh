@@ -1,4 +1,4 @@
-source "/opt/ros/humble/setup.bash" --
+. /opt/ros/humble/setup.bash
 
 #Build 
 cd /uros_ws
