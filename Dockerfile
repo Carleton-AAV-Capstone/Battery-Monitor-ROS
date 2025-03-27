@@ -9,6 +9,7 @@ RUN apt-get update && apt-get install -y \
 
 # Move the files to the appropriate place
 COPY battery_monitor ~/ros2_ws/src
+COPY ros_entrypoint.sh /
 
-# Run
-#CMD cd ~/ros2_ws && colcon build && source /opt/ros/humble/setup.bash && source install/local_setup.bash && ros2 run battery_monitor battery_monitor
+ENTRYPOINT ["/bin/sh", "/ros_entrypoint.sh"]
+CMD ["--help"]
