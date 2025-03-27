@@ -12,6 +12,7 @@ setup(
         ('share/' + package_name, ['package.xml']),
         ('lib/' + package_name, [package_name+'/VEDirect.py']),
         ('lib/' + package_name, [package_name+'/BatteryStatePublisher.py']),
+        ('lib/' + package_name, [package_name+'/HeartbeatPublisher.py']),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

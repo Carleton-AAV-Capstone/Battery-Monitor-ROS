@@ -2,18 +2,22 @@ import serial
 import rclpy
 from VEDirect import VEDirect
 from BatteryStatePublisher import BatteryStatePublisher
+from HeartbeatPublisher import HeartbeatPublisher
 from sensor_msgs.msg import BatteryState
 
 SERIAL_PORT = "/dev/ttyUSB0"
 SERIAL_BAUD = 19200
 BSP_NODE_NAME = "battery_state_publisher"
 BSP_TOPIC_NAME = "/battery_status"
+HP_NODE_NAME = "heartbeat_publisher"
+HP_TOPIC_NAME = "/battery_monitor_heartbeat"
 
 class BatteryMonitor:
-  def __init__(self, sr, vd, bsp):
+  def __init__(self, sr, vd, bsp, hp):
     self.sr = sr
     self.vd = vd
     self.bsp = bsp
+    self.hp = hp
 
   # When the data is changed we should do stuff
   def dataChanged(self):
@@ -25,6 +29,7 @@ class BatteryMonitor:
     # Send over ROS2
     self.bsp.publish_message(msg)
     # Heartbeat (built together so we know that the fullstack [hw to ros] is active)
+    self.hp.publish_time()
 
   def createBatteryState(self, data):
     # Convert dict into ROS BatteryState msg
@@ -58,7 +63,9 @@ def main():
   print("Created VEDirect Interface")
   bsp = BatteryStatePublisher(BSP_NODE_NAME, BSP_TOPIC_NAME)
   print("Created Battery State ROS2 Publisher")
-  bm = BatteryMonitor(sr, vd, bsp)
+  hp = HeartbeatPublisher(HP_NODE_NAME, HP_TOPIC_NAME)
+  print("Created Battery Monitor Heartbeat Publisher")
+  bm = BatteryMonitor(sr, vd, bsp, hp)
   print("Initialized Battery Monitor")
 
   # Loop and read serial + initiate dataChanged callback when new data arrives
