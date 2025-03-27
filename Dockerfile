@@ -8,7 +8,7 @@ RUN apt-get update && apt-get install -y \
 
 
 # Move the files to the appropriate place
-RUN cp /battery_monitor ~/ros2_ws/src
+COPY battery_monitor ~/ros2_ws/src
 
 # Build
 RUN cd ~/ros2_ws
