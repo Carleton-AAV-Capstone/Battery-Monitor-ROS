@@ -1,15 +1,13 @@
-FROM ros:humble-ros-base
+FROM microros/base:humble
 
-# install ros package
-RUN apt-get update && apt-get install -y \
-      ros-${ROS_DISTRO}-demo-nodes-cpp \
-      ros-${ROS_DISTRO}-demo-nodes-py && \
-    rm -rf /var/lib/apt/lists/*
+WORKDIR /uros_ws
+RUN . /opt/ros/$ROS_DISTRO/setup.sh \
+&&  . install/local_setup.sh \
+&&  ros2 run micro_ros_setup create_agent_ws.sh \
+&&  ros2 run micro_ros_setup build_agent.sh \
+&&  rm -rf log/ build/ src/
 
-
-# Move the files to the appropriate place
-COPY battery_monitor ~/ros2_ws/src
-COPY ros_entrypoint.sh /
+COPY ./battery_monitor /uros_ws
 
 ENTRYPOINT ["/bin/sh", "/ros_entrypoint.sh"]
 CMD ["--help"]
